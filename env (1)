@@ -1,0 +1,9 @@
+# ── The Odds API ─────────────────────────────────────────────────────────────
+ODDS_API_KEY=a5a654ceb179c1889dfd1b81adc37ae1
+
+# ── OpenAI ────────────────────────────────────────────────────────────────────
+OPENAI_API_KEY=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
+
+# ── Telegram Bot ──────────────────────────────────────────────────────────────
+TELEGRAM_BOT_TOKEN=8643519633:AAF4L395qaktVsP9IZ7A-KjytEfDKUJPxe8
+TELEGRAM_CHANNEL_ID=@NYCDailyPicks

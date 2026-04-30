@@ -1,0 +1,21 @@
+{
+  "name": "daily-picks-bot",
+  "version": "1.0.0",
+  "description": "AI-powered daily sports picks bot for DraftKings & FanDuel",
+  "type": "module",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "test": "node test.js",
+    "schedule": "node scheduler.js"
+  },
+  "dependencies": {
+    "openai": "^4.47.0",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "node-cron": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
