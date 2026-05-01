@@ -138,6 +138,7 @@ async function pollPremium() {
               "Covering NBA, NFL, MLB, NHL, EPL, Champions League, MMA, Tennis & more.\n\n" +
               "Join your private channel below 👇\n" +
               "https://t.me/+gKsDejxj0CphZDUx"
+
             );
           } else if (cmd === "/picks") {
             await sendPremiumMsg(chatId, "💎 Today's premium picks are posted in your private channel every morning at 7AM ET. Check the channel!");
