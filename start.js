@@ -23,5 +23,6 @@ cron.schedule("0 9 * * *", () => {
   picks.on("exit", (code) => console.log("Picks bot finished: " + code));
 }, { timezone: "America/New_York" });
 
+console.log("ENV CHECK:", JSON.stringify({tok: process.env.TELEGRAM_BOT_TOKEN?.slice(0,8), ch: process.env.TELEGRAM_CHANNEL_ID, admin: process.env.ADMIN_TELEGRAM_ID}));
 console.log("All bots running! Picks post daily at 9AM ET.");
 console.log("Welcome bot and Tracker bot always listening.");
