@@ -63,7 +63,7 @@ export async function autoAddPicks() {
     model: "gpt-4o",
     max_tokens: 500,
     messages: [
-      { role: "system", content: "Extract betting picks from text. Return ONLY a JSON array like: [{id:1,pick:"Knicks -4.5 (-110)",sport:"NBA",book:"DraftKings"},{id:2,...}]. No other text." },
+      { role: "system", content: "Extract betting picks from text. Return ONLY a JSON array like: [{id:1,pick:PICK_TEXT,sport:SPORT,book:BOOK},{id:2,...}]. No other text." },
       { role: "user", content: "Extract all picks from this text:\n\n" + content }
     ]
   });
