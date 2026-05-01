@@ -110,5 +110,58 @@ export async function runPremiumBot() {
   await postToPremiumChannel(picks);
   console.log("✅ Premium picks posted to channel!");
 }
+// Premium bot command handler
+let premiumOffset = 0;
+
+async function sendPremiumMsg(chatId, text) {
+  await fetch("https://api.telegram.org/bot" + PREMIUM_BOT_TOKEN + "/sendMessage", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+  });
+}
+
+async function pollPremium() {
+  try {
+    const res = await fetch("https://api.telegram.org/bot" + PREMIUM_BOT_TOKEN + "/getUpdates?offset=" + premiumOffset + "&timeout=30");
+    const data = await res.json();
+    if (data.ok && data.result.length > 0) {
+      for (const u of data.result) {
+        premiumOffset = u.update_id + 1;
+        if (u.message && u.message.text) {
+          const chatId = u.message.chat.id;
+          const cmd = u.message.text.trim().toLowerCase().split(" ")[0];
+          if (cmd === "/start" || cmd === "/welcome") {
+            await sendPremiumMsg(chatId,
+              "💎 <b>Welcome to Daily Premium Picks!</b>\n\n" +
+              "You have access to our worldwide elite picks posted daily at 7AM ET.\n\n" +
+              "Covering NBA, NFL, MLB, NHL, EPL, Champions League, MMA, Tennis & more.\n\n" +
+              "Join your private channel below 👇\n" +
+              "t.me/+your_private_invite_link"
+            );
+          } else if (cmd === "/picks") {
+            await sendPremiumMsg(chatId, "💎 Today's premium picks are posted in your private channel every morning at 7AM ET. Check the channel!");
+          } else if (cmd === "/record") {
+            await sendPremiumMsg(chatId, "📊 <b>All-Time Record</b>\n\nResults tracked and posted nightly at 11PM ET in your channel. Check the channel for the latest record!");
+          } else if (cmd === "/help") {
+            await sendPremiumMsg(chatId,
+              "💎 <b>Daily Premium Picks Bot</b>\n\n" +
+              "/start — Welcome message\n" +
+              "/picks — Today's picks info\n" +
+              "/record — Win/loss record\n" +
+              "/help — This menu"
+            );
+          } else {
+            await sendPremiumMsg(chatId, "Use /start to get started or /help for all commands. 💎");
+          }
+        }
+      }
+    }
+  } catch(e) { console.error("Premium poll error:", e.message); }
+  setTimeout(pollPremium, 1000);
+}
+
+// Start polling for premium bot commands
+pollPremium();
 
 runPremiumBot().catch(console.error);
