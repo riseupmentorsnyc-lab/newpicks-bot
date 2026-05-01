@@ -137,7 +137,7 @@ async function pollPremium() {
               "You have access to our worldwide elite picks posted daily at 7AM ET.\n\n" +
               "Covering NBA, NFL, MLB, NHL, EPL, Champions League, MMA, Tennis & more.\n\n" +
               "Join your private channel below 👇\n" +
-              "t.me/+your_private_invite_link"
+              "https://t.me/+gKsDejxj0CphZDUx"
             );
           } else if (cmd === "/picks") {
             await sendPremiumMsg(chatId, "💎 Today's premium picks are posted in your private channel every morning at 7AM ET. Check the channel!");
