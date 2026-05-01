@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
 import cron from "node-cron";
 import { autoAddPicks, autoMarkResults } from "./autotracker.js";
+import { runPremiumBot } from "./premium.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
@@ -12,17 +13,22 @@ function startBot(name, file) {
   return proc;
 }
 
-// Always-on bots
+// Always-on public welcome bot
 startBot("Welcome Bot", "welcome.js");
-startBot("Tracker Bot", "tracker.js");
 
-// 9AM ET — post picks then auto-add to tracker
+// 7AM ET — premium picks posted to private channel
+cron.schedule("0 7 * * *", async () => {
+  console.log("Running premium picks bot...");
+  await runPremiumBot();
+}, { timezone: "America/New_York" });
+
+// 9AM ET — free picks posted + auto-added to tracker
 cron.schedule("0 9 * * *", async () => {
   console.log("Running daily picks bot...");
   const picks = spawn("node", ["bot.js"], { stdio: "inherit" });
   picks.on("exit", async (code) => {
-    console.log("Picks bot finished. Auto-adding to tracker...");
-    await autoAddPicks();
+    console.log("Picks posted. Auto-adding to tracker...");
+    setTimeout(async () => { await autoAddPicks(); }, 5000);
   });
 }, { timezone: "America/New_York" });
 
@@ -32,7 +38,8 @@ cron.schedule("0 23 * * *", async () => {
   await autoMarkResults();
 }, { timezone: "America/New_York" });
 
-console.log("All bots running!");
-console.log("9AM: picks post + auto-added to tracker");
-console.log("11PM: results auto-marked and posted");
-console.log("Welcome bot and Tracker bot always listening.");
+console.log("Full auto mode active!");
+console.log("7AM: premium picks posted to VIP channel");
+console.log("9AM: free picks posted + auto-tracked");
+console.log("11PM: results auto-marked + posted");
+console.log("Welcome bot always listening.");
