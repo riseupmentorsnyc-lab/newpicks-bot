@@ -133,7 +133,7 @@ export async function autoMarkResults() {
     model: "gpt-4o",
     max_tokens: 600,
     messages: [
-      { role: "system", content: "You are a sports betting analyst. Match picks against scores. Return ONLY a JSON array like: [{id:1,result:"win"},{id:2,result:"loss"},{id:3,result:"pending"}]. No other text." },
+      { role: "system", content: "You are a sports betting analyst. Match picks against scores. Return ONLY a JSON array like: [{id:1,result:WIN_OR_LOSS},{id:2,result:WIN_OR_LOSS}]. Use win, loss, or pending. No other text." },
       { role: "user", content: "Picks:\n" + JSON.stringify(todaysPicks) + "\n\nScores:\n" + JSON.stringify(allScores) }
     ]
   });
