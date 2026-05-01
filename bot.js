@@ -124,16 +124,35 @@ Approx. Payout: +[XXX] on DraftKings
 }
 
 async function postToTelegram(message) {
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: TELEGRAM_CHANNEL_ID, text: message, parse_mode: "HTML", disable_web_page_preview: true }),
-  });
-  const data = await res.json();
-  if (!data.ok) { throw new Error(`Telegram error: ${JSON.stringify(data)}`); }
-  return data;
+  const channels = [
+    process.env.TELEGRAM_CHANNEL_ID,
+    process.env.EXTRA_CHANNEL_ID
+  ].filter(Boolean);
+
+  for (const channel of channels) {
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: channel,
+          text: message,
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        console.error(`Telegram error for ${channel}: ${JSON.stringify(data)}`);
+      } else {
+        console.log(`✅ Posted to ${channel}`);
+      }
+    } catch(e) {
+      console.error(`Failed to post to ${channel}: ${e.message}`);
+    }
+  }
 }
+
 
 async function logPicks(message) {
   const { appendFile, mkdir } = await import("fs/promises");
