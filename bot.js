@@ -7,6 +7,9 @@ dotenv.config();
 const ODDS_API_KEY = process.env.ODDS_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const DISCORD_FREE_CHANNEL = process.env.DISCORD_FREE_CHANNEL;
+const DISCORD_VIP_CHANNEL = process.env.DISCORD_VIP_CHANNEL;
 const TELEGRAM_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
 
 const ODDS_BASE = "https://api.the-odds-api.com/v4";
@@ -178,9 +181,31 @@ async function main() {
     await postToTelegram(picksMessage);
     console.log("✅ Posted to Telegram!\n");
   } else {
+    await postToDiscord(picksMessage, DISCORD_FREE_CHANNEL);
     console.log("\n⚠️ Telegram not configured — check your .env\n");
   }
   console.log("✅ Done.\n");
+}
+async function postToDiscord(message, channelId) {
+  if (!DISCORD_BOT_TOKEN || !channelId) return;
+  try {
+    const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bot ${DISCORD_BOT_TOKEN}`
+      },
+      body: JSON.stringify({ content: message })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      console.log(`✅ Posted to Discord channel ${channelId}`);
+    } else {
+      console.error(`❌ Discord error: ${JSON.stringify(data)}`);
+    }
+  } catch(e) {
+    console.error(`Discord post failed: ${e.message}`);
+  }
 }
 
 main().catch((err) => { console.error("❌ Fatal error:", err); process.exit(1); });
