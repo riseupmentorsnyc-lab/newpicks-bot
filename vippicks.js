@@ -27,14 +27,6 @@ const SPORTS = [
   { key: "mma_mixed_martial_arts", label: "🥊 MMA" },
 ];
 
-function isGameToday(commenceTime) {
-  const now = new Date();
-  const game = new Date(commenceTime);
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 2);
-  return game >= now && game <= tomorrow;
-}
-
 async function fetchOdds(sportKey) {
   try {
     const url = new URL("https://api.the-odds-api.com/v4/sports/" + sportKey + "/odds");
@@ -55,7 +47,7 @@ async function getAllOdds() {
   for (const sport of SPORTS) {
     try {
       const games = await fetchOdds(sport.key);
-      const filtered = games.filter(g => isGameToday(g.commence_time));
+      const filtered = Array.isArray(games) ? games : [];
       if (filtered.length > 0) results.push({ ...sport, games: filtered });
     } catch(e) { }
   }
