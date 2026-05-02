@@ -27,6 +27,14 @@ const SPORTS = [
   { key: "mma_mixed_martial_arts", label: "🥊 MMA/UFC" },
 ];
 
+function isGameSoonOrToday(commenceTime) {
+  const now = new Date();
+  const game = new Date(commenceTime);
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 2);
+  return game >= now && game <= tomorrow;
+}
+
 async function fetchOdds(sportKey) {
   try {
     const url = new URL("https://api.the-odds-api.com/v4/sports/" + sportKey + "/odds");
@@ -60,7 +68,7 @@ function formatOdds(sportsData) {
   let text = "";
   for (const sport of sportsData) {
     text += "=== " + sport.label + " ===\n";
-    for (const game of sport.games.slice(0, 5)) {
+    for (const game of sport.games.filter(g => isGameSoonOrToday(g.commence_time)).slice(0, 5)) {
       const gameTime = new Date(game.commence_time).toLocaleTimeString("en-US", {
         hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short"
       });

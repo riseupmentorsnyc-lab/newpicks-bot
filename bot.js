@@ -21,6 +21,14 @@ const SPORTS = [
   { key: "icehockey_nhl", label: "🏒 NHL" },
 ];
 
+function isGameSoonOrToday(commenceTime) {
+  const now = new Date();
+  const game = new Date(commenceTime);
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 2);
+  return game >= now && game <= tomorrow;
+}
+
 async function fetchOdds(sportKey) {
   const url = new URL(`${ODDS_BASE}/sports/${sportKey}/odds`);
   url.searchParams.set("apiKey", ODDS_API_KEY);
@@ -53,7 +61,7 @@ function formatOddsForPrompt(sportsData) {
   text += `Here are today's available games with DraftKings/FanDuel odds:\n\n`;
   for (const sport of sportsData) {
     text += `=== ${sport.label} ===\n`;
-    const games = sport.games.slice(0, 8);
+    const games = sport.games.filter(g => isGameSoonOrToday(g.commence_time)).slice(0, 8);
     for (const game of games) {
       const gameTime = new Date(game.commence_time).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" });
       text += `\n${game.away_team} @ ${game.home_team} — ${gameTime}\n`;
