@@ -189,8 +189,12 @@ async function main() {
     await postToTelegram(picksMessage);
     console.log("✅ Posted to Telegram!\n");
   } else {
-    await postToDiscord(picksMessage, DISCORD_FREE_CHANNEL);
     console.log("\n⚠️ Telegram not configured — check your .env\n");
+  }
+  if (DISCORD_BOT_TOKEN && DISCORD_FREE_CHANNEL) {
+    console.log("📨 Posting to Discord #free-picks...");
+    await postToDiscord(picksMessage, DISCORD_FREE_CHANNEL);
+    console.log("✅ Posted to Discord!\n");
   }
   console.log("✅ Done.\n");
 }
