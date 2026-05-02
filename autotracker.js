@@ -182,6 +182,19 @@ export async function autoMarkResults() {
   
   await postToChannel(msg);
   
+  // Post results to Discord
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_FREE_CHANNEL) {
+    try {
+      const { default: fetch2 } = await import("node-fetch");
+      await fetch2("https://discord.com/api/v10/channels/" + process.env.DISCORD_FREE_CHANNEL + "/messages", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "Authorization": "Bot " + process.env.DISCORD_BOT_TOKEN},
+        body: JSON.stringify({ content: msg })
+      });
+      console.log("✅ Results posted to Discord");
+    } catch(e) { console.error("Discord results error:", e.message); }
+  }
+  
   // Log results
   if (!existsSync("./logs")) await mkdir("./logs");
   await appendFile("./logs/results-" + today() + ".txt", "\n" + "=".repeat(60) + "\n" + new Date().toISOString() + "\n" + msg + "\n");

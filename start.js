@@ -3,6 +3,7 @@ import cron from "node-cron";
 import { autoAddPicks, autoMarkResults } from "./autotracker.js";
 import { runPremiumBot } from "./premium.js";
 import { generateAndPostTickets } from "./tickets.js";
+import { startDiscordWelcome } from "./discord-welcome.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
@@ -41,3 +42,4 @@ console.log("7AM: worldwide premium picks posted");
 console.log("9AM: free picks posted + auto-tracked");
 console.log("11PM: results auto-marked + posted");
 console.log("Welcome bot always listening.");
+startDiscordWelcome("1133614806637740053");
