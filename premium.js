@@ -12,7 +12,7 @@ const PREMIUM_BOT_TOKEN = process.env.PREMIUM_BOT_TOKEN;
 const PREMIUM_CHANNEL_ID = process.env.PREMIUM_CHANNEL_ID;
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const DISCORD_VIP_CHANNEL = process.env.DISCORD_VIP_CHANNEL;
-const WHOP_LINK = "https://whop.com/joined/nyc-daily-picks/products/premium-picks-1a/";
+const WHOP_LINK = "https://officialshahnyc.gumroad.com/l/iimxvb";
 
 const SPORTS = [
   { key: "basketball_nba", label: "🏀 NBA" },
