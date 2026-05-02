@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 import cron from "node-cron";
 import { autoAddPicks, autoMarkResults } from "./autotracker.js";
 import { runPremiumBot } from "./premium.js";
+import { generateAndPostTickets } from "./tickets.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
@@ -32,6 +33,7 @@ cron.schedule("0 9 * * *", async () => {
 cron.schedule("0 23 * * *", async () => {
   console.log("Running auto results...");
   await autoMarkResults();
+  setTimeout(async () => { await generateAndPostTickets(); }, 30000);
 }, { timezone: "America/New_York" });
 
 console.log("Full auto mode active!");
