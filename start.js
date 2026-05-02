@@ -5,6 +5,7 @@ import { runPremiumBot } from "./premium.js";
 import { generateAndPostTickets } from "./tickets.js";
 import { startDiscordWelcome } from "./discord-welcome.js";
 import { runAlldaySession } from "./allday.js";
+import { runEarlyDrops, runHighConfidence } from "./vippicks.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
