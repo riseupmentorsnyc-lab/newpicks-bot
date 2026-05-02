@@ -89,6 +89,32 @@ async function handleCommand(msg) {
     );
   }
 
+  else if (cmd === "/discord") {
+    await sendMsg(chatId,
+      "💎 <b>Link your Discord account</b>\n\n" +
+      "Send your Discord username like this:\n" +
+      "<code>discord: YourUsername</code>\n\n" +
+      "We will grant you VIP access within minutes! 🗽"
+    );
+  }
+
+  else if (msg.text && msg.text.toLowerCase().includes("discord:")) {
+    const username = msg.text.replace(/discord:/i, "").trim();
+    await sendMsg(chatId,
+      "✅ <b>Discord username received!</b>\n\n" +
+      "Username: <code>" + username + "</code>\n\n" +
+      "You will receive VIP access within minutes.\n\n" +
+      "Join your premium Telegram channel here 👇\n" +
+      "https://t.me/+gKsDejxj0CphZDUx"
+    );
+    await sendMsg(process.env.ADMIN_TELEGRAM_ID,
+      "🔔 <b>New VIP Discord Request</b>\n\n" +
+      "User ID: " + chatId + "\n" +
+      "Discord: <code>" + username + "</code>\n\n" +
+      "Assign VIP Member role in Discord now!"
+    );
+  }
+
   else {
     await sendMsg(chatId,
       "Hey! Use /start to see the menu or /help for all commands. 🗽",
