@@ -4,7 +4,7 @@ dotenv.config();
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
-const WHOP_LINK = "https://whop.com/joined/nyc-daily-picks/products/premium-picks-1a/";
+const WHOP_LINK = "https://officialshahnyc.gumroad.com/l/iimxvb";
 const CHANNEL_LINK = "https://t.me/NYCDaliyPicks";
 
 let offset = 0;
