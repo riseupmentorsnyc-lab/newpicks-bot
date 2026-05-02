@@ -10,6 +10,8 @@ const ODDS_API_KEY = process.env.ODDS_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const PREMIUM_BOT_TOKEN = process.env.PREMIUM_BOT_TOKEN;
 const PREMIUM_CHANNEL_ID = process.env.PREMIUM_CHANNEL_ID;
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const DISCORD_VIP_CHANNEL = process.env.DISCORD_VIP_CHANNEL;
 const WHOP_LINK = "https://whop.com/joined/nyc-daily-picks/products/premium-picks-1a/";
 
 const SPORTS = [
@@ -109,6 +111,13 @@ export async function runPremiumBot() {
   await logPremiumPicks(picks);
   await postToPremiumChannel(picks);
   console.log("✅ Premium picks posted to channel!");
+  if (DISCORD_BOT_TOKEN && DISCORD_VIP_CHANNEL) {
+    await fetch("https://discord.com/api/v10/channels/" + DISCORD_VIP_CHANNEL + "/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "Authorization": "Bot " + DISCORD_BOT_TOKEN},
+      body: JSON.stringify({ content: picks })
+    });
+  }
 }
 // Premium bot command handler
 let premiumOffset = 0;
