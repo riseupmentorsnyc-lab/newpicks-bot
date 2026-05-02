@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const WHOP_LINK = "https://whop.com/joined/nyc-daily-picks/products/premium-picks-1a/";
+const WHOP_LINK = "https://officialshahnyc.gumroad.com/l/iimxvb";
 const FREE_INVITE = "https://discord.gg/8wWA7MPdX";
 
 let lastEventId = null;
