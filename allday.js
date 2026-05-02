@@ -12,6 +12,7 @@ const PREMIUM_BOT_TOKEN = process.env.PREMIUM_BOT_TOKEN;
 const PREMIUM_CHANNEL_ID = "-1003952874901";
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const DISCORD_VIP_CHANNEL = process.env.DISCORD_VIP_CHANNEL;
+const WHOP_LINK = "https://officialshahnyc.gumroad.com/l/iimxvb";
 
 const SPORTS = [
   { key: "basketball_nba", label: "🏀 NBA" },
