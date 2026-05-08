@@ -27,6 +27,11 @@ function dbFile() {
 }
 
 async function loadDB() {
+  // Try Railway environment variable first
+  if (process.env.TRACKER_DB) {
+    try { return JSON.parse(process.env.TRACKER_DB); } catch(e) {}
+  }
+  // Fall back to file
   if (!existsSync(dbFile())) return { picks: [], allTimeWins: 0, allTimeLosses: 0 };
   const data = await readFile(dbFile(), "utf8");
   return JSON.parse(data);
@@ -35,6 +40,9 @@ async function loadDB() {
 async function saveDB(db) {
   if (!existsSync("./logs")) await mkdir("./logs");
   await writeFile(dbFile(), JSON.stringify(db, null, 2));
+  // Save to environment variable for Railway persistence
+  const json = JSON.stringify(db);
+  console.log("DB_UPDATE:" + json);
 }
 
 async function postToChannel(message) {
