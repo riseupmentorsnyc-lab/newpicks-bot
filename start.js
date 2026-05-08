@@ -7,6 +7,7 @@ import { startDiscordWelcome } from "./discord-welcome.js";
 import { runAlldaySession } from "./allday.js";
 import { runEarlyDrops, runHighConfidence } from "./vippicks.js";
 import { tweetDailyPicks, tweetResults, tweetWeeklyRecord } from "./twitter.js";
+import { runPrizePicksBot } from "./prizepicks.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
@@ -23,6 +24,12 @@ startBot("Welcome Bot", "welcome.js");
 cron.schedule("0 7 * * *", async () => {
   console.log("Running premium picks bot...");
   await runPremiumBot();
+}, { timezone: "America/New_York" });
+
+// 10AM ET — PrizePicks board
+cron.schedule("0 10 * * *", async () => {
+  console.log("Running PrizePicks bot...");
+  await runPrizePicksBot();
 }, { timezone: "America/New_York" });
 
 // 12PM ET — afternoon premium update
