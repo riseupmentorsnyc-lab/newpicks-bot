@@ -6,6 +6,7 @@ import { generateAndPostTickets } from "./tickets.js";
 import { startDiscordWelcome } from "./discord-welcome.js";
 import { runAlldaySession } from "./allday.js";
 import { runEarlyDrops, runHighConfidence } from "./vippicks.js";
+import { tweetDailyPicks, tweetResults, tweetWeeklyRecord } from "./twitter.js";
 
 function startBot(name, file) {
   console.log("Starting " + name + "...");
@@ -54,6 +55,7 @@ cron.schedule("0 9 * * *", async () => {
 cron.schedule("0 23 * * *", async () => {
   console.log("Running auto results...");
   await autoMarkResults();
+  try { await tweetResults(); } catch(e) { console.log("Tweet results error:", e.message); }
   setTimeout(async () => { await generateAndPostTickets(); }, 30000);
 }, { timezone: "America/New_York" });
 
