@@ -40,9 +40,17 @@ async function loadDB() {
 async function saveDB(db) {
   if (!existsSync("./logs")) await mkdir("./logs");
   await writeFile(dbFile(), JSON.stringify(db, null, 2));
-  // Save to environment variable for Railway persistence
-  const json = JSON.stringify(db);
-  console.log("DB_UPDATE:" + json);
+  if (process.env.JSONBIN_KEY && process.env.JSONBIN_ID) {
+    try {
+      const res = await fetch("https://api.jsonbin.io/v3/b/" + process.env.JSONBIN_ID, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "X-Master-Key": process.env.JSONBIN_KEY },
+        body: JSON.stringify(db)
+      });
+      if (res.ok) console.log("✅ DB saved to cloud");
+      else console.log("Cloud save failed:", await res.text());
+    } catch(e) { console.log("Cloud save error:", e.message); }
+  }
 }
 
 async function postToChannel(message) {
@@ -79,9 +87,16 @@ export async function autoAddPicks() {
   let picks = [];
   try {
     const text = response.choices[0].message.content.replace(/```json|```/g, "").trim();
-    picks = JSON.parse(text);
+    // Find JSON array in response
+    const match = text.match(/\[.*\]/s);
+    if (match) {
+      picks = JSON.parse(match[0]);
+    } else {
+      picks = JSON.parse(text);
+    }
   } catch(e) {
     console.log("Failed to parse picks:", e.message);
+    console.log("Raw response:", response.choices[0].message.content.substring(0, 200));
     return;
   }
   
