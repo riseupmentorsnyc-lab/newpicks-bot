@@ -19,7 +19,10 @@ const SPORTS = [
 ];
 
 function today() {
-  return new Date().toISOString().split("T")[0];
+  return new Date().toLocaleDateString("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric", month: "2-digit", day: "2-digit"
+  }).split("/").reverse().join("-").replace(/(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2");
 }
 
 function dbFile() {
@@ -64,8 +67,16 @@ async function postToChannel(message) {
 // Called after bot.js posts picks — parses log and adds picks to tracker
 export async function autoAddPicks() {
   console.log("\n📋 Auto-adding picks from log...");
-  const file = "./logs/picks-" + today() + ".txt";
-  if (!existsSync(file)) { console.log("No picks log found."); return; }
+  // Try today first, then yesterday
+  let file = "./logs/picks-" + today() + ".txt";
+  if (!existsSync(file)) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yDate = yesterday.toISOString().split("T")[0];
+    file = "./logs/picks-" + yDate + ".txt";
+    if (!existsSync(file)) { console.log("No picks log found."); return; }
+    console.log("Using yesterday log:", yDate);
+  }
   
   const content = await readFile(file, "utf8");
   const db = await loadDB();
