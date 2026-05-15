@@ -169,7 +169,7 @@ async function logPicks(message) {
   const { appendFile, mkdir } = await import("fs/promises");
   const { existsSync } = await import("fs");
   if (!existsSync("./logs")) await mkdir("./logs");
-  const date = new Date().toLocaleDateString("en-CA", {timeZone: "America/New_York"});
+  const date = new Date().toISOString().split("T")[0];
   await appendFile(`./logs/picks-${date}.txt`, `\n${"=".repeat(60)}\n${new Date().toISOString()}\n${"=".repeat(60)}\n${message}\n`);
   console.log(`📝 Logged to ./logs/picks-${date}.txt`);
 }
